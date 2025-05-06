@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>paperToDOCX</title>
+</head>
+<body>
+    <div class="wrapper">
+
+        
+        <!-- хедер -->
+        <div class="header">
+            <div class="container">
+                <div class="headerLeft">
+                    <p>paperToDOCX — Веб-Приложение Для Автоматизированного Заполнения Шаблонов Документов</p>
+                </div>
+                <div class="headerRight">
+                    <img src="imgs/logo.png" alt="HSPM logo">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- контент -->
+        <div class="mainContent">
+            <div class="app">
+
+
+                <!-- инструкция -->
+                <h2 class="sectionTitle">Краткая инструкция</h2>
+                <div class="instructionsArea">
+                    <ol>
+                        <li>Нажмите "Создать шаблон" для создания нового шаблона документа</li>
+                        <li>Добавьте необходимые поля с помощью кнопки "+ Добавить поле"</li>
+                        <li>Сохраните шаблон под уникальным именем</li>
+                        <li>В разделе "Мои шаблоны" вы можете редактировать, скачивать или удалять созданные шаблоны</li>
+                    </ol>
+                </div>
+            
+
+                <!-- конструктор шаблонов -->
+                <h2 class="sectionTitle">Конструктор шаблонов</h2>
+                
+                <div class="buttonsRow">
+                    <div class="imageBtn" id="createTemplateBtn">
+                        <img src="imgs/createtemplate.png" alt="Создать шаблон">
+                        <span>Создать шаблон</span>
+                    </div>
+                    <div class="imageBtn" id="myTemplatesBtn">
+                        <img src="imgs/myTemplates.png" alt="Мои шаблоны">
+                        <span>Мои шаблоны</span>
+                    </div>
+                </div>
+            
+
+                <!-- готовые шаблоны -->
+                <h2 class="sectionTitle">Готовые шаблоны</h2>
+                <div class="templateButtons">
+                    <div class="imageBtn">
+                        <img src="imgs/template.png" alt="Шаблон 1">
+                        <span>Шаблон №1</span>
+                    </div>
+                    <div class="imageBtn">
+                        <img src="imgs/template.png" alt="Шаблон 2">
+                        <span>Шаблон №2</span>
+                    </div>
+                    <div class="imageBtn">
+                        <img src="imgs/template.png" alt="Шаблон 3">
+                        <span>Шаблон №3</span>
+                     </div>
+                    <div class="imageBtn">
+                        <img src="imgs/template.png" alt="Шаблон 4">
+                        <span>Шаблон №4</span>
+                    </div>
+                    <div class="imageBtn"> 
+                        <img src="imgs/template.png" alt="Шаблон 5">
+                        <span>Шаблон №5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- футер -->
+        <div class="footer">
+            <div class="container">
+                <div class="footerInfo">
+                    <p>Высшая Школа Печати и Медиатехнологий</p>
+                    <p>Кафедра Информационных и Управляющих Систем</p>
+                    <p>09.03.01 Информатика и Вычислительная Техника</p>
+                    <p>Разработка IT-Систем и Мультимедийных Приложений</p>
+                    <p>Шадрин Егор Михайлович, 4-ТИД-7, 2025</p>
+                </div>
+                
+                <div class="footerLinks">
+                    <div class="footerLinkItem">
+                        <a href="https://github.com/grawwe/paperToDOCX" class="imgLink">
+                            <img src="imgs/github.png" alt="Код">
+                        </a>
+                        <span class="footerLinkLabel">Исходный код</span>
+                    </div>
+                    <div class="footerLinkItem">
+                        <a href="https://docs.google.com/presentation/d/1bXBD3GGEHHESn5KxOzMQ1o5DroZ52UcffgodXSnRMJQ/edit?usp=sharing" class="imgLink">
+                            <img src="imgs/presentation.png" alt="Презентация">
+                        </a>
+                        <span class="footerLinkLabel">Презентация</span>
+                    </div>
+                    <div class="footerLinkItem">
+                        <div class="imgLink" id="libInfo">
+                            <img src="imgs/lib.png" alt="Инфо">
+                        </div>
+                        <span class="footerLinkLabel">Инфо</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- модальные окна -->
+
+
+    <!-- инфо -->
+    <div id="libModal" class="modal">
+        <div class="modalContent">
+            <p>==================================================</p>
+            <p>Веб-Приложение paperToDOCX написано с использованием библиотек:</p>
+            <p><a href="https://github.com/open-xml-templating/docxtemplater?tab=readme-ov-file">docxtemplater</a> — для создания и заполнения шаблонов формата .docx</p>
+            <p><a href="https://github.com/open-xml-templating/pizzip">pizzip</a> — вспомогательная библиотека для работы docxtemplater</p>
+            <p>==================================================</p>
+            <p>Также используется сервис <a href="https://www.cloudflare.com/ru-ru/">Cloudflare</a></p>
+            <p>Исключительно как CDN (Content Delivery Network) для быстрой загрузки используемых ранее упомянутых библиотек.</p>
+            <p>==================================================</p>
+            <p>Все иконки взяты из открытого доступа с сайта <a href="https://www.flaticon.com">www.flaticon.com</a>. По <a href="https://support.flaticon.com/articles/en_US/Knowledge/Personal-use-FI">правилам</a> бесплатного использования, для каждого используемого значка необходимо указывать автора.</p>
+            <p>Авторы: <a href="https://www.flaticon.com/authors/pixel-perfect">Pixel perfect</a>, <a href="https://www.flaticon.com/authors/three-musketeers">Three musketeers</a>, <a href="https://www.flaticon.com/authors/freepik">Freepik</a></p>
+            <p>==================================================</p>
+        </div>
+    </div>
+
+
+    <!-- создание шаблона -->
+    <div id="createTemplateModal" class="modal">
+        <div class="modalContent">
+            <h2>Создать шаблон</h2>
+            <div id="templateFields"></div>
+            <button id="addFieldBtn">+ Добавить поле</button>
+            <div class="modalActions">
+                <button id="saveTemplateBtn">Сохранить</button>
+                <button class="modalClose">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- мои шаблоны -->
+    <div id="templatesListModal" class="modal">
+            <div class="modalContent">
+                <h2>Мои шаблоны</h2>
+                <div id="templatesContainer"></div>
+                <button class="modalClose">Закрыть</button>
+            </div>
+    </div>
+
+
+    <!-- основной скрипт -->
+    <script src="script.js"></script>
+
+
+    <!-- библиотеки -->
+    <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
+    <script src="https://unpkg.com/docxtemplater@3.42.0/build/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>
