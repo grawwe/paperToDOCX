@@ -260,6 +260,26 @@ button {
 }
 
 
+/* шаблоны */
+.formField {
+    margin: 15px 0;
+    width: 100%;
+}
+
+.formField label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.formInput {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
 /* адаптивность */
 @media (max-width: 768px) {
     .footer .container {
