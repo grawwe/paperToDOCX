@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.className = 'modal active';
                 modal.innerHTML = `
                     <div class="modalContent">
-                        <h2>Информация о библиотеках</h2>
+                        <h2>Информация о проекте</h2>
                         <p>==================================================</p>
                         <p>Веб-Приложение paperToDOCX написано с использованием библиотек:</p>
                         <p><a href="https://github.com/open-xml-templating/docxtemplater?tab=readme-ov-file">docxtemplater</a> — для создания и заполнения шаблонов формата .docx</p>
@@ -226,8 +226,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 
                 <div class="formField">
-                    <label>ФИО студента (группа):</label>
-                    <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М., 4-ТИД-7">
+                    <label>ФИО студента:</label>
+                    <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М.">
+                </div>
+                
+                <div class="formField">
+                    <label>Группа:</label>
+                    <input type="text" id="group" class="formInput" placeholder="4-ТИД-7">
                 </div>
                 
                 <div class="formField">
@@ -260,7 +265,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('napravlenie').addEventListener('change', updateProfileOptions);
         document.getElementById('generateCourseDocx').addEventListener('click', generateCourseDocx);
         
-
         // обработчик для кнопки отмены
         modal.querySelector('.modalActions .modalClose').addEventListener('click', closeAllModals);
     }
@@ -336,8 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // генерация документа 
     async function generateCourseDocx() {
         try {
-
-
             // получаем данные формы 
             const formData = {
                 institute: document.getElementById('instituteSelect').value,
@@ -347,17 +349,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 disciplne: document.getElementById('disciplne').value,
                 tema: document.getElementById('tema').value,
                 fio: document.getElementById('fio').value,
+                group: document.getElementById('group').value,
                 prep: document.getElementById('prep').value,
                 ryk: document.getElementById('ryk').value,
                 year: document.getElementById('year').value
             };
 
-
             // загрузка шаблона с netlify
             const response = await fetch(TEMPLATE_URL);
             const template = await response.blob();
             
-
             // генерация документа 
             const reader = new FileReader();
             reader.onload = function() {
