@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Конфигурация 
+
+
+    // конфигурация 
     const TEMPLATE_URL = 'https://papertodocx.netlify.app/template_course.docx';
     
-    // Данные для кафедр 
+
+    // данные для кафедр 
     const kafedraOptions = {
         'Медиатехнологий': [
             'Журналистики и медиатехнологий СМИ',
@@ -17,11 +20,84 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
-    // Инициализация 
+
+    // направления и профили для кафедр
+    const napravlenieProfiles = {
+
+
+        // ИМТ
+        'Журналистики и медиатехнологий СМИ': {
+            napravlenie: ['04.03.02 Журналистика', '04.04.02 Журналистика'],
+            profile: 'Журналистика'
+        },
+        'Графики': {
+            napravlenie: ['54.03.03 Графика'],
+            profile: 'Художник‑график (оформление печатной продукции)'
+        },
+        'Книгоиздания и книжной торговли': {
+            napravlenie: ['42.03.03 Издательское дело', '42.04.03 Издательское дело'],
+            profile: {
+                '42.03.03 Издательское дело': 'Издательские процессы в медиасфере',
+                '42.04.03 Издательское дело': 'Издательские стратегии в медиапространстве'
+            }
+        },
+        'Рекламы': {
+            napravlenie: ['42.03.01 Реклама и связи с общественностью', '42.04.01 Реклама и связи с общественностью'],
+            profile: {
+                '42.03.01 Реклама и связи с общественностью': ['Реклама в медиаиндустрии', 'PR в медиаиндустрии'],
+                '42.04.01 Реклама и связи с общественностью': 'Реклама и связи с общественностью в медиаиндустрии'
+            }
+        },
+        
+
+        // ИПТИО
+        'Технологии полиграфического производства': {
+            napravlenie: [
+                '29.03.03 Технология полиграфического и упаковочного производства',
+                '29.04.03 Технология полиграфического и упаковочного производства'
+            ],
+            profile: {
+                '29.03.03 Технология полиграфического и упаковочного производства': [
+                    'Технология полиграфического производства',
+                    'Технология и дизайн упаковочного производства'
+                ],
+                '29.04.03 Технология полиграфического и упаковочного производства': 'Технология полиграфического производства'
+            }
+        },
+        'Информационных и управляющих систем': {
+            napravlenie: [
+                '09.03.01 Информатика и вычислительная техника',
+                '09.03.02 Информационные системы и технологии',
+                '09.04.02 Информационные системы и технологии'
+            ],
+            profile: {
+                '09.03.01 Информатика и вычислительная техника': 'Разработка IT‑систем и мультимедийных приложений',
+                '09.03.02 Информационные системы и технологии': [
+                    'Информационные технологии в дизайне',
+                    'Информационные технологии в медиаиндустрии'
+                ],
+                '09.04.02 Информационные системы и технологии': 'Цифровые технологии в медиакоммуникациях и дизайне'
+            }
+        },
+        'Полиграфического оборудования и управления': {
+            napravlenie: [
+                '15.03.02 Технологические машины и оборудование',
+                '38.03.02 Менеджмент'
+            ],
+            profile: {
+                '15.03.02 Технологические машины и оборудование': 'Принтмедиасистемы и комплексы',
+                '38.03.02 Менеджмент': 'Менеджмент в медиабизнесе и полиграфии'
+            }
+        }
+    };
+
+
+    // инициализация 
     let templates = JSON.parse(localStorage.getItem('templates')) || [];
     let currentEditingIndex = null;
 
-    // Получение элементов 
+
+    // получение элементов 
     const createBtn = document.getElementById('createTemplateBtn');
     const listBtn = document.getElementById('myTemplatesBtn');
     const infoBtn = document.getElementById('libInfo');
@@ -34,32 +110,79 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveTemplateBtn = document.getElementById('saveTemplateBtn');
     const templatesContainer = document.getElementById('templatesContainer');
 
-    // Инициализация приложения 
+
+    // инициализация приложения 
     function initApp() {
-        // Оригинальные обработчики из вашего кода
+
+
+        // Обработчики
         if (createBtn) createBtn.addEventListener('click', openCreateModal);
         if (listBtn) listBtn.addEventListener('click', openListModal);
-        if (infoBtn) infoBtn.addEventListener('click', openInfoModal);
         if (addFieldBtn) addFieldBtn.addEventListener('click', addField);
         if (saveTemplateBtn) saveTemplateBtn.addEventListener('click', saveTemplate);
+        if (infoBtn) {
+            infoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.modal').forEach(m => m.remove()); // удаляем все существующие модальные окна
+                
 
-        // Новый обработчик для кнопки шаблона курсовой
+                // создаем новое модальное окно
+                const modal = document.createElement('div');
+                modal.className = 'modal active';
+                modal.innerHTML = `
+                    <div class="modalContent">
+                        <h2>Информация о библиотеках</h2>
+                        <p>==================================================</p>
+                        <p>Веб-Приложение paperToDOCX написано с использованием библиотек:</p>
+                        <p><a href="https://github.com/open-xml-templating/docxtemplater?tab=readme-ov-file">docxtemplater</a> — для создания и заполнения шаблонов формата .docx</p>
+                        <p><a href="https://github.com/open-xml-templating/pizzip">pizzip</a> — вспомогательная библиотека для работы docxtemplater</p>
+                        <p>==================================================</p>
+                        <p>Также используется сервис <a href="https://www.cloudflare.com/ru-ru/">Cloudflare</a></p>
+                        <p>Исключительно как CDN (Content Delivery Network) для быстрой загрузки используемых ранее упомянутых библиотек.</p>
+                        <p>==================================================</p>
+                        <p>Все иконки взяты из открытого доступа с сайта <a href="https://www.flaticon.com">www.flaticon.com</a>. По <a href="https://support.flaticon.com/articles/en_US/Knowledge/Personal-use-FI">правилам</a> бесплатного использования, для каждого используемого значка необходимо указывать автора.</p>
+                        <p>Авторы: <a href="https://www.flaticon.com/authors/pixel-perfect">Pixel perfect</a>, <a href="https://www.flaticon.com/authors/three-musketeers">Three musketeers</a>, <a href="https://www.flaticon.com/authors/freepik">Freepik</a></p>
+                        <p>==================================================</p>
+                        <div class="modalActions">
+                            <button class="modalClose">Закрыть</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                document.body.style.overflow = 'hidden';
+                
+
+                // обработчик закрытия
+                modal.querySelector('.modalClose').addEventListener('click', function() {
+                    modal.remove();
+                    document.body.style.overflow = 'auto';
+                });
+            });
+        }
+
+
+        // обработчик для кнопки шаблона курсовой
         if (courseTemplateBtn) {
             courseTemplateBtn.addEventListener('click', showCourseForm);
         }
 
-        // Закрытие модальных окон 
+
+        // закрытие модальных окон 
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modalClose')) {
                 closeAllModals();
             }
             if (e.target.classList.contains('modal')) {
-                closeAllModals();
+                if (e.target === e.currentTarget.querySelector('.modal')) {
+                    closeAllModals();
+                }
             }
         });
     }
 
-    // Функция показа формы курсовой 
+
+    // функция показа формы курсача
     function showCourseForm() {
         closeAllModals();
         
@@ -84,12 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <div class="formField">
                     <label>Направление подготовки:</label>
-                    <input type="text" id="napravlenie" class="formInput" placeholder="09.03.01 Информатика и Вычислительная Техника">
+                    <select id="napravlenie" class="formInput"></select>
                 </div>
                 
-                <div class="formField">
+                <div class="formField" id="profileField">
                     <label>Профиль подготовки:</label>
-                    <input type="text" id="profile" class="formInput" placeholder="Разработка IT-Систем и Мультимедийных Приложений">
+                    <select id="profile" class="formInput"></select>
                 </div>
                 
                 <div class="formField">
@@ -104,35 +227,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <div class="formField">
                     <label>ФИО студента (группа):</label>
-                    <input type="text" id="fio" class="formInput" placeholder="Иванов И.И., 4-ТИД-7">
+                    <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М., 4-ТИД-7">
                 </div>
                 
                 <div class="formField">
-                    <label>Руководитель:</label>
-                    <input type="text" id="ryk" class="formInput" placeholder="Петров П.П.">
+                    <label>ФИО руководителя:</label>
+                    <input type="text" id="prep" class="formInput" placeholder="Иванов И.И.">
+                </div>
+                
+                <div class="formField">
+                    <label>Должность руководителя:</label>
+                    <input type="text" id="ryk" class="formInput" placeholder="уч. степень, звание">
                 </div>
                 
                 <div class="formField">
                     <label>Год:</label>
-                    <input type="text" id="year" class="formInput" placeholder="2024">
+                    <input type="text" id="year" class="formInput" placeholder="2025">
                 </div>
                 
                 <div class="modalActions">
                     <button id="generateCourseDocx" class="primary-btn">Сгенерировать DOCX</button>
-                    <button class="modalClose">Отмена</button>
+                    <button class="modalClose secondary-btn">Отмена</button>
                 </div>
             </div>
         `;
-        
         document.body.appendChild(modal);
         document.body.style.overflow = 'hidden';
         updateKafedraOptions();
-        
+        modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
         document.getElementById('instituteSelect').addEventListener('change', updateKafedraOptions);
+        document.getElementById('kafedraSelect').addEventListener('change', updateNapravlenieOptions);
+        document.getElementById('napravlenie').addEventListener('change', updateProfileOptions);
         document.getElementById('generateCourseDocx').addEventListener('click', generateCourseDocx);
+        
+
+        // обработчик для кнопки отмены
+        modal.querySelector('.modalActions .modalClose').addEventListener('click', closeAllModals);
     }
 
-    // Обновление кафедр 
+
+    // обновление 
     function updateKafedraOptions() {
         const instituteSelect = document.getElementById('instituteSelect');
         if (!instituteSelect) return;
@@ -144,13 +278,67 @@ document.addEventListener('DOMContentLoaded', function() {
             kafedraSelect.innerHTML = kafedraOptions[institute]
                 .map(opt => `<option value="${opt}">${opt}</option>`)
                 .join('');
+            
+            // обновляем направления после изменения кафедры
+            updateNapravlenieOptions();
         }
     }
 
-    // Генерация документа 
+    // обновление направлений
+    function updateNapravlenieOptions() {
+        const kafedraSelect = document.getElementById('kafedraSelect');
+        if (!kafedraSelect) return;
+        
+        const kafedra = kafedraSelect.value;
+        const napravlenieSelect = document.getElementById('napravlenie');
+        
+        if (napravlenieSelect && napravlenieProfiles[kafedra]) {
+            const options = napravlenieProfiles[kafedra].napravlenie;
+            napravlenieSelect.innerHTML = options
+                .map(opt => `<option value="${opt}">${opt}</option>`)
+                .join('');
+            
+            // обновляем профили после изменения направления
+            updateProfileOptions();
+        }
+    }
+
+    // обновление профилей
+    function updateProfileOptions() {
+        const kafedraSelect = document.getElementById('kafedraSelect');
+        const napravlenieSelect = document.getElementById('napravlenie');
+        const profileSelect = document.getElementById('profile');
+        
+        if (!kafedraSelect || !napravlenieSelect || !profileSelect) return;
+        
+        const kafedra = kafedraSelect.value;
+        const napravlenie = napravlenieSelect.value;
+        
+        if (napravlenieProfiles[kafedra]) {
+            const profileData = napravlenieProfiles[kafedra].profile;
+            
+            if (typeof profileData === 'string') {  // один профиль  
+                profileSelect.innerHTML = `<option value="${profileData}">${profileData}</option>`;
+            } else if (typeof profileData === 'object') { // профиль зависит от направления
+                const profile = profileData[napravlenie];
+                if (Array.isArray(profile)) { // несколько вариантов профиля
+                    profileSelect.innerHTML = profile
+                        .map(opt => `<option value="${opt}">${opt}</option>`)
+                        .join('');
+                } else { // один профиль
+                    profileSelect.innerHTML = `<option value="${profile}">${profile}</option>`;
+                }
+            }
+        }
+    }
+
+
+    // генерация документа 
     async function generateCourseDocx() {
         try {
-            // Получаем данные формы 
+
+
+            // получаем данные формы 
             const formData = {
                 institute: document.getElementById('instituteSelect').value,
                 kafedra: document.getElementById('kafedraSelect').value,
@@ -159,45 +347,176 @@ document.addEventListener('DOMContentLoaded', function() {
                 disciplne: document.getElementById('disciplne').value,
                 tema: document.getElementById('tema').value,
                 fio: document.getElementById('fio').value,
+                prep: document.getElementById('prep').value,
                 ryk: document.getElementById('ryk').value,
-                prep: document.getElementById('ryk').value.split(' ')[1] || '',
                 year: document.getElementById('year').value
             };
 
-            // Загрузка шаблона с Netlify
+
+            // загрузка шаблона с netlify
             const response = await fetch(TEMPLATE_URL);
             const template = await response.blob();
             
-            // Генерация документа 
+
+            // генерация документа 
             const reader = new FileReader();
             reader.onload = function() {
                 const zip = new PizZip(reader.result);
                 const doc = new docxtemplater().loadZip(zip);
                 doc.setData(formData);
                 doc.render();
-                
                 const out = doc.getZip().generate({ type: "blob" });
                 saveAs(out, `course_work_${formData.year}_${formData.fio.split(',')[0].trim()}.docx`);
                 closeAllModals();
             };
             reader.readAsArrayBuffer(template);
         } catch (error) {
-            console.error('Ошибка генерации:', error);
-            alert('Ошибка при создании документа! Проверьте подключение к интернету.');
+            console.error('Ошибка генерации.', error);
+            alert('Ошибка при создании документа!');
         }
     }
 
-    function openCreateModal() { /* ... */ }
-    function openListModal() { /* ... */ }
-    function openInfoModal(e) { /* ... */ }
-    function closeAllModals() { /* ... */ }
-    function addField() { /* ... */ }
-    function saveTemplate() { /* ... */ }
-    function renderTemplatesList() { /* ... */ }
-    window.editTemplate = function(index) { /* ... */ };
-    window.deleteTemplate = function(index) { /* ... */ };
-    window.generateCustomDocx = async function(index) { /* ... */ };
+    function closeAllModals() {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.classList.remove('active');
+            modal.remove();
+        });
+        document.body.style.overflow = 'auto';
+    }
 
-    // Запуск приложения
+    function openCreateModal() {
+        closeAllModals();
+        createModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openListModal() {
+        closeAllModals();
+        listModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        renderTemplatesList();
+    }
+
+    function openInfoModal() {
+        closeAllModals();
+        infoModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        infoModal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+    }
+
+    function addField() {
+        const fieldId = Date.now();
+        const fieldHTML = `
+            <div class="templateField" data-id="${fieldId}">
+                <input type="text" class="fieldName" placeholder="Название поля">
+                <select class="fieldType">
+                    <option value="text">Текст</option>
+                    <option value="number">Число</option>
+                    <option value="date">Дата</option>
+                </select>
+                <button class="removeFieldBtn" onclick="this.parentElement.remove()">×</button>
+            </div>
+        `;
+        templateFields.insertAdjacentHTML('beforeend', fieldHTML);
+    }
+
+    function saveTemplate() {
+        const templateName = document.getElementById('templateName').value;
+        if (!templateName) {
+            alert('Введите название шаблона!');
+            return;
+        }
+
+        const fields = [];
+        document.querySelectorAll('.templateField').forEach(field => {
+            const name = field.querySelector('.fieldName').value;
+            const type = field.querySelector('.fieldType').value;
+            if (name) fields.push({ name, type });
+        });
+
+        if (fields.length === 0) {
+            alert('Добавьте хотя бы одно поле!');
+            return;
+        }
+
+        const template = {
+            name: templateName,
+            fields: fields
+        };
+
+        if (currentEditingIndex !== null) {
+            templates[currentEditingIndex] = template;
+            currentEditingIndex = null;
+        } else {
+            templates.push(template);
+        }
+
+        localStorage.setItem('templates', JSON.stringify(templates));
+        closeAllModals();
+    }
+
+    function renderTemplatesList() {
+        templatesContainer.innerHTML = '';
+        if (templates.length === 0) {
+            templatesContainer.innerHTML = '<p>У вас пока нет шаблонов</p>';
+            return;
+        }
+
+        templates.forEach((template, index) => {
+            const templateHTML = `
+                <div class="templateItem">
+                    <h3>${template.name}</h3>
+                    <p>Поля: ${template.fields.map(f => f.name).join(', ')}</p>
+                    <div class="templateActions">
+                        <button onclick="editTemplate(${index})">Редактировать</button>
+                        <button onclick="deleteTemplate(${index})">Удалить</button>
+                        <button onclick="generateCustomDocx(${index})">Создать документ</button>
+                    </div>
+                </div>
+            `;
+            templatesContainer.insertAdjacentHTML('beforeend', templateHTML);
+        });
+    }
+
+    window.editTemplate = function(index) {
+        currentEditingIndex = index;
+        const template = templates[index];
+        document.getElementById('templateName').value = template.name;
+        templateFields.innerHTML = '';
+        
+        template.fields.forEach(field => {
+            const fieldId = Date.now();
+            const fieldHTML = `
+                <div class="templateField" data-id="${fieldId}">
+                    <input type="text" class="fieldName" placeholder="Название поля" value="${field.name}">
+                    <select class="fieldType">
+                        <option value="text" ${field.type === 'text' ? 'selected' : ''}>Текст</option>
+                        <option value="number" ${field.type === 'number' ? 'selected' : ''}>Число</option>
+                        <option value="date" ${field.type === 'date' ? 'selected' : ''}>Дата</option>
+                    </select>
+                    <button class="removeFieldBtn" onclick="this.parentElement.remove()">×</button>
+                </div>
+            `;
+            templateFields.insertAdjacentHTML('beforeend', fieldHTML);
+        });
+        
+        openCreateModal();
+    };
+
+    window.deleteTemplate = function(index) {
+        if (confirm('Вы уверены, что хотите удалить этот шаблон?')) {
+            templates.splice(index, 1);
+            localStorage.setItem('templates', JSON.stringify(templates));
+            renderTemplatesList();
+        }
+    };
+
+    window.generateCustomDocx = async function(index) {
+        // реализация генерации документа для пользовательских шаблонов
+        alert('Функция генерации документа для пользовательских шаблонов будет реализована позже');
+    };
+
+    // чиназес)
     initApp();
 });

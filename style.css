@@ -208,6 +208,15 @@ button {
     margin-top: 20px;
 }
 
+.modalActions button {
+    padding: 8px 16px;
+    margin-top: 15px;
+    background: #5c9ffb;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 /* стили для кнопок с картинками */
 .imageBtn {
