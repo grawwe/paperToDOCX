@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-
     // конфигурация 
     const TEMPLATE_URL = 'https://papertodocx.netlify.app/template_course.docx';
+    const VKR_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_vkr.docx';
     
 
     // данные для кафедр 
@@ -23,8 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // направления и профили для кафедр
     const napravlenieProfiles = {
-
-
         // ИМТ
         'Журналистики и медиатехнологий СМИ': {
             napravlenie: ['04.03.02 Журналистика', '04.04.02 Журналистика'],
@@ -49,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         
-
         // ИПТИО
         'Технологии полиграфического производства': {
             napravlenie: [
@@ -102,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const listBtn = document.getElementById('myTemplatesBtn');
     const infoBtn = document.getElementById('libInfo');
     const courseTemplateBtn = document.querySelector('.templateButtons .imageBtn:first-child');
+    const vkrTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(2)');
     const createModal = document.getElementById('createTemplateModal');
     const listModal = document.getElementById('templatesListModal');
     const infoModal = document.getElementById('libModal');
@@ -113,8 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // инициализация приложения 
     function initApp() {
-
-
         // Обработчики
         if (createBtn) createBtn.addEventListener('click', openCreateModal);
         if (listBtn) listBtn.addEventListener('click', openListModal);
@@ -125,24 +120,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 document.querySelectorAll('.modal').forEach(m => m.remove()); // удаляем все существующие модальные окна
                 
-
                 // создаем новое модальное окно
                 const modal = document.createElement('div');
                 modal.className = 'modal active';
                 modal.innerHTML = `
                     <div class="modalContent">
                         <h2>Информация о проекте</h2>
-                        <p>==================================================</p>
+                        <p>=====================</p>
                         <p>Веб-Приложение paperToDOCX написано с использованием библиотек:</p>
                         <p><a href="https://github.com/open-xml-templating/docxtemplater?tab=readme-ov-file">docxtemplater</a> — для создания и заполнения шаблонов формата .docx</p>
                         <p><a href="https://github.com/open-xml-templating/pizzip">pizzip</a> — вспомогательная библиотека для работы docxtemplater</p>
-                        <p>==================================================</p>
+                        <p>=====================</p>
                         <p>Также используется сервис <a href="https://www.cloudflare.com/ru-ru/">Cloudflare</a></p>
                         <p>Исключительно как CDN (Content Delivery Network) для быстрой загрузки используемых ранее упомянутых библиотек.</p>
-                        <p>==================================================</p>
+                        <p>=====================</p>
                         <p>Все иконки взяты из открытого доступа с сайта <a href="https://www.flaticon.com">www.flaticon.com</a>. По <a href="https://support.flaticon.com/articles/en_US/Knowledge/Personal-use-FI">правилам</a> бесплатного использования, для каждого используемого значка необходимо указывать автора.</p>
                         <p>Авторы: <a href="https://www.flaticon.com/authors/pixel-perfect">Pixel perfect</a>, <a href="https://www.flaticon.com/authors/three-musketeers">Three musketeers</a>, <a href="https://www.flaticon.com/authors/freepik">Freepik</a></p>
-                        <p>==================================================</p>
+                        <p>=====================</p>
                         <div class="modalActions">
                             <button class="modalClose">Закрыть</button>
                         </div>
@@ -152,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.appendChild(modal);
                 document.body.style.overflow = 'hidden';
                 
-
                 // обработчик закрытия
                 modal.querySelector('.modalClose').addEventListener('click', function() {
                     modal.remove();
@@ -161,12 +154,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-
-        // обработчик для кнопки шаблона курсовой
+        // обработчики для кнопок шаблонов
         if (courseTemplateBtn) {
             courseTemplateBtn.addEventListener('click', showCourseForm);
         }
-
+        
+        if (vkrTemplateBtn) {
+            vkrTemplateBtn.addEventListener('click', showVkrForm);
+        }
 
         // закрытие модальных окон 
         document.addEventListener('click', function(e) {
@@ -181,6 +176,174 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    
+    // функция показа формы ВКР
+    function showVkrForm() {
+        closeAllModals();
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modalContent">
+                <h2>Титульный лист ВКР</h2>
+                
+                <div class="formField">
+                    <label>Институт:</label>
+                    <select id="instituteSelect" class="formInput">
+                        <option value="Медиатехнологий">Медиатехнологий</option>
+                        <option value="Полиграфических технологий и оборудования">Полиграфических технологий и оборудования</option>
+                    </select>
+                </div>
+                
+                <div class="formField">
+                    <label>Кафедра:</label>
+                    <select id="kafedraSelect" class="formInput"></select>
+                </div>
+                
+                <div class="formField">
+                    <label>Направление подготовки:</label>
+                    <select id="napravlenie" class="formInput"></select>
+                </div>
+                
+                <div class="formField">
+                    <label>Тема работы:</label>
+                    <input type="text" id="tema" class="formInput">
+                </div>
+                
+                <div class="formField">
+                    <label>ФИО студента:</label>
+                    <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М.">
+                </div>
+                
+                <div class="formField">
+                    <label>Группа:</label>
+                    <input type="text" id="group" class="formInput" placeholder="4-ТИД-7">
+                </div>
+                
+                <div class="formField">
+                    <label>ФИО руководителя:</label>
+                    <input type="text" id="prep" class="formInput" placeholder="Иванов И.И.">
+                </div>
+                
+                <div class="formField">
+                    <label>Должность руководителя:</label>
+                    <input type="text" id="ryk" class="formInput" placeholder="уч. степень, звание">
+                </div>
+                
+                <div class="formField">
+                    <label>Количество консультантов:</label>
+                    <select id="consultantCount" class="formInput">
+                        <option value="0">Нет консультантов</option>
+                        <option value="1">1 консультант</option>
+                        <option value="2">2 консультанта</option>
+                    </select>
+                </div>
+                
+                <div id="consultantFields"></div>
+                
+                <div class="formField">
+                    <label>Нормоконтролёр:</label>
+                    <input type="text" id="normocontrol" class="formInput">
+                </div>
+                
+                <div class="formField">
+                    <label>Год:</label>
+                    <input type="text" id="year" class="formInput" placeholder="2025">
+                </div>
+                
+                <div class="modalActions">
+                    <button id="generateVkrDocx" class="primary-btn">Сгенерировать DOCX</button>
+                    <button class="modalClose secondary-btn">Отмена</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        updateKafedraOptions();
+        
+        // Обработчики событий
+        modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+        document.getElementById('instituteSelect').addEventListener('change', updateKafedraOptions);
+        document.getElementById('kafedraSelect').addEventListener('change', updateNapravlenieOptions);
+        document.getElementById('consultantCount').addEventListener('change', updateConsultantFields);
+        document.getElementById('generateVkrDocx').addEventListener('click', generateVkrDocx);
+        
+
+        // Инициализация полей консультантов
+        updateConsultantFields();
+    }
+
+
+    // Обновление полей консультантов
+    function updateConsultantFields() {
+        const count = document.getElementById('consultantCount').value;
+        const container = document.getElementById('consultantFields');
+        container.innerHTML = '';
+        
+        for (let i = 1; i <= count; i++) {
+            const fieldHTML = `
+                <div class="formField">
+                    <label>Консультант ${i}:</label>
+                    <input type="text" id="konsult${i}" class="formInput" placeholder="ФИО, ученая степень, звание">
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', fieldHTML);
+        }
+    }
+
+
+    // Генерация документа ВКР
+    async function generateVkrDocx() {
+        try {
+            // получаем данные формы 
+            const napravlenie = document.getElementById('napravlenie').value;
+            const napravlenieCode = napravlenie.split(' ')[0];
+            const isMagistratura = napravlenieCode.split('.')[1] === '04';
+            
+            const formData = {
+                institute: document.getElementById('instituteSelect').value,
+                kafedra: document.getElementById('kafedraSelect').value,
+                napravlenie: napravlenie,
+                obr: isMagistratura ? 'Магистерская диссертация' : 'Бакалаврская работа',
+                tema: document.getElementById('tema').value,
+                FIO: document.getElementById('fio').value,
+                group: document.getElementById('group').value,
+                prep: document.getElementById('prep').value,
+                normocontrol: document.getElementById('normocontrol').value,
+                year: document.getElementById('year').value
+            };
+            
+            // Добавляем консультантов
+            const consultantCount = document.getElementById('consultantCount').value;
+            for (let i = 1; i <= consultantCount; i++) {
+                formData[`konsult${i}`] = document.getElementById(`konsult${i}`).value;
+            }
+            
+            // Если консультантов меньше 2, добавляем пустые значения
+            if (consultantCount < 2) formData.konsult2 = '';
+            if (consultantCount < 1) formData.konsult1 = '';
+
+            // загрузка шаблона с netlify
+            const response = await fetch(VKR_TEMPLATE_URL);
+            const template = await response.blob();
+            
+            // генерация документа 
+            const reader = new FileReader();
+            reader.onload = function() {
+                const zip = new PizZip(reader.result);
+                const doc = new docxtemplater().loadZip(zip);
+                doc.setData(formData);
+                doc.render();
+                const out = doc.getZip().generate({ type: "blob" });
+                saveAs(out, `vkr_${formData.year}_${formData.FIO.split(' ')[0]}.docx`);
+                closeAllModals();
+            };
+            reader.readAsArrayBuffer(template);
+        } catch (error) {
+            console.error('Ошибка генерации.', error);
+            alert('Ошибка при создании документа!');
+        }
+    }
 
     // функция показа формы курсача
     function showCourseForm() {
@@ -264,11 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('kafedraSelect').addEventListener('change', updateNapravlenieOptions);
         document.getElementById('napravlenie').addEventListener('change', updateProfileOptions);
         document.getElementById('generateCourseDocx').addEventListener('click', generateCourseDocx);
-        
-        // обработчик для кнопки отмены
-        modal.querySelector('.modalActions .modalClose').addEventListener('click', closeAllModals);
     }
-
 
     // обновление 
     function updateKafedraOptions() {
@@ -303,7 +462,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 .join('');
             
             // обновляем профили после изменения направления
-            updateProfileOptions();
+            if (document.getElementById('profile')) {
+                updateProfileOptions();
+            }
         }
     }
 
@@ -336,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
     // генерация документа 
     async function generateCourseDocx() {
         try {
@@ -367,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 doc.setData(formData);
                 doc.render();
                 const out = doc.getZip().generate({ type: "blob" });
-                saveAs(out, `course_work_${formData.year}_${formData.fio.split(',')[0].trim()}.docx`);
+                saveAs(out, `course_work_${formData.year}_${formData.fio.split(' ')[0]}.docx`);
                 closeAllModals();
             };
             reader.readAsArrayBuffer(template);
@@ -518,6 +678,6 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Функция генерации документа для пользовательских шаблонов будет реализована позже');
     };
 
-    // чиназес)
+    // инициализация приложения
     initApp();
 });
