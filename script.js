@@ -222,12 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <div class="formField">
                     <label>ФИО руководителя:</label>
-                    <input type="text" id="prep" class="formInput" placeholder="Иванов И.И.">
-                </div>
-                
-                <div class="formField">
-                    <label>Должность руководителя:</label>
-                    <input type="text" id="ryk" class="formInput" placeholder="уч. степень, звание">
+                    <input type="text" id="prep" class="formInput" placeholder="уч. степень, звание, Иванов И.И.">
                 </div>
                 
                 <div class="formField">
@@ -243,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <div class="formField">
                     <label>Нормоконтролёр:</label>
-                    <input type="text" id="normocontrol" class="formInput">
+                    <input type="text" id="normocontrol" class="formInput" placeholder="уч. степень, звание, Иванов И.И.">
                 </div>
                 
                 <div class="formField">
@@ -284,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const fieldHTML = `
                 <div class="formField">
                     <label>Консультант ${i}:</label>
-                    <input type="text" id="konsult${i}" class="formInput" placeholder="ФИО, ученая степень, звание">
+                    <input type="text" id="konsult${i}" class="formInput" placeholder="уч. степень, звание, Иванов И.И.">
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', fieldHTML);
