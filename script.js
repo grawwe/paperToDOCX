@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // конфигурация 
     const TEMPLATE_URL = 'https://papertodocx.netlify.app/template_course.docx';
     const VKR_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_vkr.docx';
+    const VKR_ZADANIE_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_vkr_zadanie.docx';
+    const COURSE_ZADANIE_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_course_zadanie.docx';
+    const AKADEM_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_akadem.docx';
+    const VOSSTANOVLENIE_TEMPLATE_URL = 'https://papertodocx.netlify.app/template_vosstanovlenie.docx';
+    
     
 
     // данные для кафедр 
@@ -87,6 +92,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // Месяцы и количество дней в них
+    const months = [
+        { name: 'январь', days: 31 },
+        { name: 'февраль', days: 29 },
+        { name: 'март', days: 31 },
+        { name: 'апрель', days: 30 },
+        { name: 'май', days: 31 },
+        { name: 'июнь', days: 30 },
+        { name: 'июль', days: 31 },
+        { name: 'август', days: 31 },
+        { name: 'сентябрь', days: 30 },
+        { name: 'октябрь', days: 31 },
+        { name: 'ноябрь', days: 30 },
+        { name: 'декабрь', days: 31 }
+    ];
 
     // инициализация 
     let templates = JSON.parse(localStorage.getItem('templates')) || [];
@@ -99,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const infoBtn = document.getElementById('libInfo');
     const courseTemplateBtn = document.querySelector('.templateButtons .imageBtn:first-child');
     const vkrTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(2)');
+    const courseZadanieTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(3)');
+    const vkrZadanieTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(4)');
     const createModal = document.getElementById('createTemplateModal');
     const listModal = document.getElementById('templatesListModal');
     const infoModal = document.getElementById('libModal');
@@ -106,6 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const addFieldBtn = document.getElementById('addFieldBtn');
     const saveTemplateBtn = document.getElementById('saveTemplateBtn');
     const templatesContainer = document.getElementById('templatesContainer');
+    const akademTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(5)');
+    const vosstanovlenieTemplateBtn = document.querySelector('.templateButtons .imageBtn:nth-child(6)');
 
 
     // инициализация приложения 
@@ -163,6 +187,22 @@ document.addEventListener('DOMContentLoaded', function() {
             vkrTemplateBtn.addEventListener('click', showVkrForm);
         }
 
+        if (courseZadanieTemplateBtn) {
+            courseZadanieTemplateBtn.addEventListener('click', showCourseZadanieForm);
+        }
+
+        if (vkrZadanieTemplateBtn) {
+            vkrZadanieTemplateBtn.addEventListener('click', showVkrZadanieForm);
+        }
+
+        if (akademTemplateBtn) {
+            akademTemplateBtn.addEventListener('click', showAkademForm);
+        }   
+
+        if (vosstanovlenieTemplateBtn) {
+            vosstanovlenieTemplateBtn.addEventListener('click', showVosstanovlenieForm);
+        }
+
         // закрытие модальных окон 
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modalClose')) {
@@ -176,7 +216,703 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Функция показа формы академического отпуска
+function showAkademForm() {
+    closeAllModals();
     
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modalContent">
+            <h2>Заявление на академический отпуск</h2>
+            
+            <div class="formField">
+                <label>ФИО студента:</label>
+                <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М.">
+            </div>
+            
+            <div class="formField">
+                <label>Институт:</label>
+                <select id="institute" class="formInput">
+                    <option value="Медиатехнологий">Медиатехнологий</option>
+                    <option value="Полиграфических технологий и оборудования">Полиграфических технологий и оборудования</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Курс:</label>
+                <input type="number" id="course" class="formInput" min="1" max="6" placeholder="4">
+            </div>
+            
+            <div class="formField">
+                <label>Группа:</label>
+                <input type="text" id="group" class="formInput" placeholder="4-ТИД-7">
+            </div>
+            
+            <div class="formField">
+                <label>Форма обучения:</label>
+                <select id="form" class="formInput">
+                    <option value="очной">очной</option>
+                    <option value="очно-заочной">очно-заочной</option>
+                    <option value="заочной">заочной</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Направление подготовки:</label>
+                <input type="text" id="napravlenie" class="formInput" placeholder="09.03.01 Информатика и вычислительная техника">
+            </div>
+            
+            <div class="formField">
+                <label>Тип обучения:</label>
+                <select id="obrtype" class="formInput">
+                    <option value="по договору">по договору</option>
+                    <option value="за счёт бюджетных ассигнований">за счёт бюджетных ассигнований</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Телефон:</label>
+                <input type="tel" id="phone" class="formInput" placeholder="+7(999)123-45-67" pattern="\+7\(\d{3}\)\d{3}-\d{2}-\d{2}">
+            </div>
+            
+            <div class="formField">
+                <label>Причина:</label>
+                <input type="text" id="reason" class="formInput" placeholder="медицинские показания">
+            </div>
+            
+            <div class="formField">
+                <label>Дата начала:</label>
+                <div class="dateSelectors">
+                    <select id="startDay" class="formInput dateSelect"></select>
+                    <select id="startMonth" class="formInput dateSelect"></select>
+                    <select id="startYear" class="formInput dateSelect"></select>
+                </div>
+            </div>
+            
+            <div class="formField">
+                <label>Дата окончания:</label>
+                <div class="dateSelectors">
+                    <select id="endDay" class="formInput dateSelect"></select>
+                    <select id="endMonth" class="formInput dateSelect"></select>
+                    <select id="endYear" class="formInput dateSelect"></select>
+                </div>
+            </div>
+            
+            <div class="formField">
+                <label>Прилагаемые документы:</label>
+                <input type="text" id="info" class="formInput" placeholder="медицинская справка">
+            </div>
+            
+            <div class="modalActions">
+                <button id="generateAkademDocx" class="primary-btn">Сгенерировать DOCX</button>
+                <button class="modalClose secondary-btn">Отмена</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Инициализация дат
+    initDateSelectorsForAkadem();
+    
+    // Обработчики событий
+    modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+    document.getElementById('startMonth').addEventListener('change', function() {
+        updateDays('startDay', 'startMonth');
+    });
+    document.getElementById('endMonth').addEventListener('change', function() {
+        updateDays('endDay', 'endMonth');
+    });
+    document.getElementById('generateAkademDocx').addEventListener('click', generateAkademDocx);
+    
+    // Маска для телефона
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function(e) {
+        const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+        e.target.value = !x[1] ? '' : `+${x[1]}${x[2] ? '(' + x[2] : ''}${x[3] ? ')' + x[3] : ''}${x[4] ? '-' + x[4] : ''}${x[5] ? '-' + x[5] : ''}`;
+    });
+}
+
+function initDateSelectorsForAkadem() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    
+    // Инициализация месяцев
+    const monthSelects = document.querySelectorAll('#startMonth, #endMonth');
+    monthSelects.forEach(select => {
+        select.innerHTML = months.map(month => 
+            `<option value="${month.name}">${month.name}</option>`
+        ).join('');
+    });
+    
+    // Инициализация дней
+    updateDays('startDay', 'startMonth');
+    updateDays('endDay', 'endMonth');
+    
+    // Инициализация годов
+    const yearSelects = document.querySelectorAll('#startYear, #endYear');
+    yearSelects.forEach(select => {
+        select.innerHTML = `
+            <option value="${currentYear}">${currentYear}</option>
+            <option value="${currentYear + 1}">${currentYear + 1}</option>
+        `;
+    });
+}
+
+// Генерация документа академического отпуска
+async function generateAkademDocx() {
+    try {
+        // Извлекаем код направления из полного названия
+        const napravlenie = document.getElementById('napravlenie').value;
+        const code = napravlenie.match(/\d{2}\.\d{2}\.\d{2}/)?.[0] || '';
+        
+        // Получаем данные формы
+        const formData = {
+            fio: document.getElementById('fio').value,
+            institute: document.getElementById('institute').value,
+            course: document.getElementById('course').value,
+            group: document.getElementById('group').value,
+            form: document.getElementById('form').value,
+            code: code,
+            napravlenie: napravlenie,
+            obrtype: document.getElementById('obrtype').value,
+            phone: document.getElementById('phone').value,
+            reason: document.getElementById('reason').value,
+            info: document.getElementById('info').value,
+            '1day': document.getElementById('startDay').value,
+            '1month': document.getElementById('startMonth').value,
+            '1year': document.getElementById('startYear').value,
+            '2day': document.getElementById('endDay').value,
+            '2month': document.getElementById('endMonth').value,
+            '2year': document.getElementById('endYear').value,
+            '3day': new Date().getDate(),
+            '3month': months[new Date().getMonth()].name,
+            '3year': new Date().getFullYear()
+        };
+
+        // Загрузка шаблона
+        const response = await fetch(AKADEM_TEMPLATE_URL);
+        const template = await response.blob();
+        
+        // Генерация документа
+        const reader = new FileReader();
+        reader.onload = function() {
+            const zip = new PizZip(reader.result);
+            const doc = new docxtemplater().loadZip(zip);
+            doc.setData(formData);
+            doc.render();
+            const out = doc.getZip().generate({ type: "blob" });
+            saveAs(out, `akadem_${formData.fio.split(' ')[0]}.docx`);
+            closeAllModals();
+        };
+        reader.readAsArrayBuffer(template);
+    } catch (error) {
+        console.error('Ошибка генерации.', error);
+        alert('Ошибка при создании документа!');
+    }
+}
+
+// Функция показа формы восстановления обучения
+function showVosstanovlenieForm() {
+    closeAllModals();
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.innerHTML = `
+        <div class="modalContent">
+            <h2>Заявление на восстановление обучения</h2>
+            
+            <div class="formField">
+                <label>ФИО студента:</label>
+                <input type="text" id="fio" class="formInput" placeholder="Шадрин Е.М.">
+            </div>
+            
+            <div class="formField">
+                <label>Институт:</label>
+                <select id="institute" class="formInput">
+                    <option value="Медиатехнологий">Медиатехнологий</option>
+                    <option value="Полиграфических технологий и оборудования">Полиграфических технологий и оборудования</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Курс:</label>
+                <input type="number" id="course" class="formInput" min="1" max="6" placeholder="4">
+            </div>
+            
+            <div class="formField">
+                <label>Группа:</label>
+                <input type="text" id="group" class="formInput" placeholder="4-ТИД-7">
+            </div>
+            
+            <div class="formField">
+                <label>Форма обучения:</label>
+                <select id="form" class="formInput">
+                    <option value="очной">очной</option>
+                    <option value="очно-заочной">очно-заочной</option>
+                    <option value="заочной">заочной</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Направление подготовки:</label>
+                <input type="text" id="napravlenie" class="formInput" placeholder="09.03.01 Информатика и вычислительная техника">
+            </div>
+            
+            <div class="formField">
+                <label>Профиль подготовки:</label>
+                <input type="text" id="profile" class="formInput" placeholder="Разработка IT-систем и мультимедийных приложений">
+            </div>
+            
+            <div class="formField">
+                <label>Тип обучения:</label>
+                <select id="obrtype" class="formInput">
+                    <option value="по договору">по договору</option>
+                    <option value="за счёт бюджетных ассигнований">за счёт бюджетных ассигнований</option>
+                </select>
+            </div>
+            
+            <div class="formField">
+                <label>Телефон:</label>
+                <input type="tel" id="phone" class="formInput" placeholder="+7(999)123-45-67" pattern="\+7\(\d{3}\)\d{3}-\d{2}-\d{2}">
+            </div>
+            
+            <div class="formField">
+                <label>Дата восстановления:</label>
+                <div class="dateSelectors">
+                    <select id="restoreDay" class="formInput dateSelect"></select>
+                    <select id="restoreMonth" class="formInput dateSelect"></select>
+                    <select id="restoreYear" class="formInput dateSelect"></select>
+                </div>
+            </div>
+            
+            <div class="modalActions">
+                <button id="generateVosstanovlenieDocx" class="primary-btn">Сгенерировать DOCX</button>
+                <button class="modalClose secondary-btn">Отмена</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Инициализация дат
+    initDateSelectorsForVosstanovlenie();
+    
+    // Обработчики событий
+    modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+    document.getElementById('restoreMonth').addEventListener('change', function() {
+        updateDays('restoreDay', 'restoreMonth');
+    });
+    document.getElementById('generateVosstanovlenieDocx').addEventListener('click', generateVosstanovlenieDocx);
+    
+    // Маска для телефона
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function(e) {
+        const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+        e.target.value = !x[1] ? '' : `+${x[1]}${x[2] ? '(' + x[2] : ''}${x[3] ? ')' + x[3] : ''}${x[4] ? '-' + x[4] : ''}${x[5] ? '-' + x[5] : ''}`;
+    });
+}
+
+function initDateSelectorsForVosstanovlenie() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    
+    // Инициализация месяцев
+    const monthSelect = document.getElementById('restoreMonth');
+    monthSelect.innerHTML = months.map(month => 
+        `<option value="${month.name}">${month.name}</option>`
+    ).join('');
+    
+    // Инициализация дней
+    updateDays('restoreDay', 'restoreMonth');
+    
+    // Инициализация годов
+    const yearSelect = document.getElementById('restoreYear');
+    yearSelect.innerHTML = `
+        <option value="${currentYear}">${currentYear}</option>
+        <option value="${currentYear + 1}">${currentYear + 1}</option>
+    `;
+}
+
+// Генерация документа восстановления обучения
+async function generateVosstanovlenieDocx() {
+    try {
+        // Извлекаем код направления из полного названия
+        const napravlenie = document.getElementById('napravlenie').value;
+        const code = napravlenie.match(/\d{2}\.\d{2}\.\d{2}/)?.[0] || '';
+        
+        // Получаем данные формы
+        const formData = {
+            fio: document.getElementById('fio').value,
+            institute: document.getElementById('institute').value,
+            course: document.getElementById('course').value,
+            group: document.getElementById('group').value,
+            form: document.getElementById('form').value,
+            code: code,
+            napravlenie: napravlenie,
+            profile: document.getElementById('profile').value,
+            obrtype: document.getElementById('obrtype').value,
+            phone: document.getElementById('phone').value,
+            '1day': document.getElementById('restoreDay').value,
+            '1month': document.getElementById('restoreMonth').value,
+            '1year': document.getElementById('restoreYear').value,
+            '2day': new Date().getDate(),
+            '2month': months[new Date().getMonth()].name,
+            '2year': new Date().getFullYear()
+        };
+
+        // Загрузка шаблона
+        const response = await fetch(VOSSTANOVLENIE_TEMPLATE_URL);
+        const template = await response.blob();
+        
+        // Генерация документа
+        const reader = new FileReader();
+        reader.onload = function() {
+            const zip = new PizZip(reader.result);
+            const doc = new docxtemplater().loadZip(zip);
+            doc.setData(formData);
+            doc.render();
+            const out = doc.getZip().generate({ type: "blob" });
+            saveAs(out, `vosstanovlenie_${formData.fio.split(' ')[0]}.docx`);
+            closeAllModals();
+        };
+        reader.readAsArrayBuffer(template);
+    } catch (error) {
+        console.error('Ошибка генерации.', error);
+        alert('Ошибка при создании документа!');
+    }
+    }
+    // Функция показа формы задания курсовой
+    function showCourseZadanieForm() {
+        closeAllModals();
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modalContent">
+                <h2>Бланк задания для курсовой работы</h2>
+                
+                <div class="formField">
+                    <label>Дисциплина:</label>
+                    <input type="text" id="discipline" class="formInput">
+                </div>
+                
+                <div class="formField">
+                    <label>ФИО студента:</label>
+                    <input type="text" id="name" class="formInput" placeholder="Шадрин Е.М.">
+                </div>
+                
+                <div class="formField">
+                    <label>Группа:</label>
+                    <input type="text" id="group" class="formInput" placeholder="4-ТИД-7">
+                </div>
+                
+                <div class="formField">
+                    <label>Тема работы:</label>
+                    <input type="text" id="tema" class="formInput">
+                </div>
+                
+                <div class="formField">
+                    <label>Срок сдачи студентом законченного проекта:</label>
+                    <div class="dateSelectors">
+                        <select id="sday" class="formInput dateSelect"></select>
+                        <select id="smonth" class="formInput dateSelect"></select>
+                        <select id="syear" class="formInput dateSelect"></select>
+                    </div>
+                </div>
+                
+                <div class="formField">
+                    <label>Исходные данные к проекту:</label>
+                    <textarea id="ish_dan" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Содержание расчетно-пояснительной записки:</label>
+                    <textarea id="zapiska" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Перечень графического материала:</label>
+                    <textarea id="gr_mat" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Литература и прочие материалы, рекомендуемые для изучения:</label>
+                    <textarea id="liter" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>ФИО руководителя:</label>
+                    <input type="text" id="prep" class="formInput" placeholder="уч. степень, звание, Иванов И.И.">
+                </div>
+                
+                <div class="formField">
+                    <label>Дата выдачи задания:</label>
+                    <div class="dateSelectors">
+                        <select id="vday" class="formInput dateSelect"></select>
+                        <select id="vmonth" class="formInput dateSelect"></select>
+                        <select id="vyear" class="formInput dateSelect"></select>
+                    </div>
+                </div>
+                
+                <div class="modalActions">
+                    <button id="generateCourseZadanieDocx" class="primary-btn">Сгенерировать DOCX</button>
+                    <button class="modalClose secondary-btn">Отмена</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        
+        // Инициализация дат
+        initDateSelectors();
+        
+        // Обработчики событий
+        modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+        document.getElementById('smonth').addEventListener('change', function() {
+            updateDays('sday', 'smonth');
+        });
+        document.getElementById('vmonth').addEventListener('change', function() {
+            updateDays('vday', 'vmonth');
+        });
+        document.getElementById('generateCourseZadanieDocx').addEventListener('click', generateCourseZadanieDocx);
+    }
+
+    // Инициализация выбора даты
+    function initDateSelectors() {
+        // Текущая дата
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        
+        // Инициализация месяцев
+        const monthSelects = document.querySelectorAll('#smonth, #vmonth');
+        monthSelects.forEach(select => {
+            select.innerHTML = months.map(month => 
+                `<option value="${month.name}">${month.name}</option>`
+            ).join('');
+        });
+        
+        // Инициализация дней
+        updateDays('sday', 'smonth');
+        updateDays('vday', 'vmonth');
+        
+        // Инициализация годов
+        const yearSelects = document.querySelectorAll('#syear, #vyear');
+        yearSelects.forEach(select => {
+            select.innerHTML = `
+                <option value="${currentYear - 1}">${currentYear - 1}</option>
+                <option value="${currentYear}">${currentYear}</option>
+                <option value="${currentYear + 1}">${currentYear + 1}</option>
+            `;
+        });
+    }
+
+    // Обновление списка дней при изменении месяца
+    function updateDays(dayId, monthId) {
+        const monthSelect = document.getElementById(monthId);
+        const daySelect = document.getElementById(dayId);
+        
+        if (!monthSelect || !daySelect) return;
+        
+        const selectedMonth = months.find(m => m.name === monthSelect.value);
+        if (!selectedMonth) return;
+        
+        const currentDay = parseInt(daySelect.value) || 1;
+        daySelect.innerHTML = '';
+        
+        for (let i = 1; i <= selectedMonth.days; i++) {
+            daySelect.innerHTML += `<option value="${i}" ${i === currentDay ? 'selected' : ''}>${i}</option>`;
+        }
+    }
+
+    // Генерация документа задания курсовой
+    async function generateCourseZadanieDocx() {
+        try {
+            // получаем данные формы 
+            const formData = {
+                discipline: document.getElementById('discipline').value,
+                name: document.getElementById('name').value,
+                group: document.getElementById('group').value,
+                tema: document.getElementById('tema').value,
+                sday: document.getElementById('sday').value,
+                smonth: document.getElementById('smonth').value,
+                syear: document.getElementById('syear').value,
+                ish_dan: document.getElementById('ish_dan').value,
+                zapiska: document.getElementById('zapiska').value,
+                gr_mat: document.getElementById('gr_mat').value,
+                liter: document.getElementById('liter').value,
+                prep: document.getElementById('prep').value,
+                vday: document.getElementById('vday').value,
+                vmonth: document.getElementById('vmonth').value,
+                vyear: document.getElementById('vyear').value
+            };
+
+            // загрузка шаблона
+            const response = await fetch(COURSE_ZADANIE_TEMPLATE_URL);
+            const template = await response.blob();
+            
+            // генерация документа 
+            const reader = new FileReader();
+            reader.onload = function() {
+                const zip = new PizZip(reader.result);
+                const doc = new docxtemplater().loadZip(zip);
+                doc.setData(formData);
+                doc.render();
+                const out = doc.getZip().generate({ type: "blob" });
+                saveAs(out, `course_zadanie_${formData.name.split(' ')[0]}.docx`);
+                closeAllModals();
+            };
+            reader.readAsArrayBuffer(template);
+        } catch (error) {
+            console.error('Ошибка генерации.', error);
+            alert('Ошибка при создании документа!');
+        }
+    }
+
+    // функция показа формы задания ВКР
+    function showVkrZadanieForm() {
+        closeAllModals();
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modalContent">
+                <h2>Бланк задания для ВКР</h2>
+                
+                <div class="formField">
+                    <label>ФИО студента:</label>
+                    <input type="text" id="name" class="formInput" placeholder="Шадрин Е.М.">
+                </div>
+                
+                <div class="formField">
+                    <label>Направление подготовки:</label>
+                    <select id="napravlenie" class="formInput">
+                        <option value="09.03.01 Информатика и вычислительная техника">09.03.01 Информатика и вычислительная техника</option>
+                        <option value="09.03.02 Информационные системы и технологии">09.03.02 Информационные системы и технологии</option>
+                        <option value="09.04.02 Информационные системы и технологии">09.04.02 Информационные системы и технологии</option>
+                    </select>
+                </div>
+                
+                <div class="formField">
+                    <label>Профиль подготовки:</label>
+                    <select id="profile" class="formInput"></select>
+                </div>
+                
+                <div class="formField">
+                    <label>Тема работы:</label>
+                    <input type="text" id="tema" class="formInput">
+                </div>
+                
+                <div class="formField">
+                    <label>Исходные данные по выпускной квалификационной работе:</label>
+                    <textarea id="per_dan" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Перечень подлежащих разработке в выпускной квалификационной работе вопросов или ее краткое содержание:</label>
+                    <textarea id="per_soder" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Перечень иллюстративно-графического и раздаточного материала (с точным указанием обязательных чертежей, схем, слайдов и пр.):</label>
+                    <textarea id="per_illust" class="formInput" rows="3"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>Консультанты по разделам ВКР:</label>
+                    <textarea id="consult" class="formInput" rows="3" placeholder="должность, Ф.И.О, название раздела"></textarea>
+                </div>
+                
+                <div class="formField">
+                    <label>ФИО руководителя:</label>
+                    <input type="text" id="prep" class="formInput" placeholder="уч. степень, звание, Иванов И.И.">
+                </div>
+                
+                <div class="modalActions">
+                    <button id="generateVkrZadanieDocx" class="primary-btn">Сгенерировать DOCX</button>
+                    <button class="modalClose secondary-btn">Отмена</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        
+        // Инициализация профилей
+        updateProfileOptionsForVkrZadanie();
+        
+        // Обработчики событий
+        modal.querySelector('.modalClose').addEventListener('click', closeAllModals);
+        document.getElementById('napravlenie').addEventListener('change', updateProfileOptionsForVkrZadanie);
+        document.getElementById('generateVkrZadanieDocx').addEventListener('click', generateVkrZadanieDocx);
+    }
+
+    // Обновление профилей для формы задания ВКР
+    function updateProfileOptionsForVkrZadanie() {
+        const napravlenieSelect = document.getElementById('napravlenie');
+        const profileSelect = document.getElementById('profile');
+        
+        if (!napravlenieSelect || !profileSelect) return;
+        
+        const napravlenie = napravlenieSelect.value;
+        const kafedra = 'Информационных и управляющих систем';
+        
+        if (napravlenieProfiles[kafedra]) {
+            const profileData = napravlenieProfiles[kafedra].profile;
+            
+            if (typeof profileData === 'object') {
+                const profile = profileData[napravlenie];
+                if (Array.isArray(profile)) {
+                    // Несколько вариантов профиля
+                    profileSelect.innerHTML = profile
+                        .map(opt => `<option value="${opt}">${opt}</option>`)
+                        .join('');
+                } else if (profile) {
+                    // Один профиль
+                    profileSelect.innerHTML = `<option value="${profile}">${profile}</option>`;
+                }
+            }
+        }
+    }
+
+    // Генерация документа задания ВКР
+    async function generateVkrZadanieDocx() {
+        try {
+            // получаем данные формы 
+            const formData = {
+                name: document.getElementById('name').value,
+                napravlenie: document.getElementById('napravlenie').value,
+                profile: document.getElementById('profile').value,
+                tema: document.getElementById('tema').value,
+                per_dan: document.getElementById('per_dan').value,
+                per_soder: document.getElementById('per_soder').value,
+                per_illust: document.getElementById('per_illust').value,
+                consult: document.getElementById('consult').value,
+                prep: document.getElementById('prep').value
+            };
+
+            // загрузка шаблона
+            const response = await fetch(VKR_ZADANIE_TEMPLATE_URL);
+            const template = await response.blob();
+            
+            // генерация документа 
+            const reader = new FileReader();
+            reader.onload = function() {
+                const zip = new PizZip(reader.result);
+                const doc = new docxtemplater().loadZip(zip);
+                doc.setData(formData);
+                doc.render();
+                const out = doc.getZip().generate({ type: "blob" });
+                saveAs(out, `vkr_zadanie_${formData.name.split(' ')[0]}.docx`);
+                closeAllModals();
+            };
+            reader.readAsArrayBuffer(template);
+        } catch (error) {
+            console.error('Ошибка генерации.', error);
+            alert('Ошибка при создании документа!');
+        }
+    }
+
     // функция показа формы ВКР
     function showVkrForm() {
         closeAllModals();
@@ -263,11 +999,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('consultantCount').addEventListener('change', updateConsultantFields);
         document.getElementById('generateVkrDocx').addEventListener('click', generateVkrDocx);
         
-
         // Инициализация полей консультантов
         updateConsultantFields();
     }
-
 
     // Обновление полей консультантов
     function updateConsultantFields() {
@@ -285,7 +1019,6 @@ document.addEventListener('DOMContentLoaded', function() {
             container.insertAdjacentHTML('beforeend', fieldHTML);
         }
     }
-
 
     // Генерация документа ВКР
     async function generateVkrDocx() {

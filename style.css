@@ -289,7 +289,7 @@ button {
 }
 
 
-/* адаптивность */
+/* медиа запросы */
 @media (max-width: 768px) {
     .footer .container {
         flex-direction: column;
@@ -326,4 +326,22 @@ button {
     .footerInfo p {
         font-size: 0.8rem;
     }
+}
+
+/* маска ввода телефона */
+input:invalid {
+    border-color: #ff6b6b;
+}
+
+input:valid {
+    border-color: #51cf66;
+}
+
+.dateSelectors {
+    display: flex;
+    gap: 10px;
+}
+
+.dateSelect {
+    flex: 1;
 }
