@@ -88,6 +88,10 @@
                         <img src="imgs/template.png" alt="Отчисление">
                         <span>Заявление на Отчисление</span>
                     </div>
+                    <div class="imageBtn"> 
+                        <img src="imgs/template.png" alt="Отпуск">
+                        <span>Заявление на Отпуск</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,7 +116,7 @@
                         <span class="footerLinkLabel">Исходный код</span>
                     </div>
                     <div class="footerLinkItem">
-                        <a href="https://docs.google.com/presentation/d/1bXBD3GGEHHESn5KxOzMQ1o5DroZ52UcffgodXSnRMJQ/edit?usp=sharing" class="imgLink">
+                        <a href="https://docs.google.com/presentation/d/19kFNnVmJrgVAOgBLuBzMbe0JrKZBdie5AA0BVCWLZ5E/edit?usp=sharing" class="imgLink">
                             <img src="imgs/presentation.png" alt="Презентация">
                         </a>
                         <span class="footerLinkLabel">Презентация</span>
@@ -127,6 +131,38 @@
             </div>
         </div>
 
+
+    
+    <!-- Модальное окно создания шаблона -->
+<div class="modal" id="createTemplateModal">
+    <div class="modalContent">
+        <h2>Создать новый шаблон</h2>
+        <div class="formField">
+            <label>Название шаблона:</label>
+            <input type="text" id="templateName" class="formInput" placeholder="Введите название">
+        </div>
+        
+        <div id="templateFields"></div>
+        
+        <button id="addFieldBtn">+ Добавить поле</button>
+        
+        <div class="modalActions">
+            <button id="saveTemplateBtn">Сохранить шаблон</button>
+            <button class="modalClose">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно списка шаблонов -->
+<div class="modal" id="templatesListModal">
+    <div class="modalContent">
+        <h2>Мои шаблоны</h2>
+        <div id="templatesContainer"></div>
+        <div class="modalActions">
+            <button class="modalClose">Закрыть</button>
+        </div>
+    </div>
+</div>
 
     <!-- основной скрипт -->
     <script src="script.js"></script>
